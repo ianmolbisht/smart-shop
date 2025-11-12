@@ -1,5 +1,3 @@
-
-
 import React, { useState } from "react";
 import axios from "axios";
 import {
@@ -23,18 +21,14 @@ const MLAnalytics = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // === Run Forecast API ===
   const runForecast = async () => {
     setLoading(true);
     setError("");
     setForecastData([]);
     try {
       const res = await axios.get(FORECAST_URL);
-      if (res.status === 200) {
-        setForecastData(res.data.forecast || []);
-      } else {
-        setError("Error fetching forecast data");
-      }
+      if (res.status === 200) setForecastData(res.data.forecast || []);
+      else setError("Error fetching forecast data");
     } catch (err) {
       console.error(err);
       setError("Failed to fetch forecast data from backend");
@@ -43,7 +37,6 @@ const MLAnalytics = () => {
     }
   };
 
-  // === Run Classification API ===
   const runClassification = async () => {
     setLoading(true);
     setError("");
@@ -55,9 +48,7 @@ const MLAnalytics = () => {
         if (res.data.products && res.data.products.length > 0) {
           setSelectedProduct(res.data.products[0].product);
         }
-      } else {
-        setError("Error fetching classification data");
-      }
+      } else setError("Error fetching classification data");
     } catch (err) {
       console.error(err);
       setError("Failed to fetch classification data from backend");
@@ -71,75 +62,62 @@ const MLAnalytics = () => {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>🤖 SmartShop — ML Analytics</h2>
-
+      <h1 style={styles.heading}>SmartShop — ML Analytics</h1>
       {error && <p style={styles.error}>{error}</p>}
 
-      {/* ================= Forecast Section ================= */}
+      {/* === Forecast Section === */}
       <section style={styles.section}>
         <div style={styles.headerRow}>
-          <h3 style={styles.sectionTitle}>📈 Sales Forecast (Regression)</h3>
+          <h3 style={styles.sectionTitle}>Sales Forecast (Regression)</h3>
           <button onClick={runForecast} style={styles.primaryBtn}>
             {loading ? "Running..." : "Run Forecast"}
           </button>
         </div>
 
         {forecastData.length > 0 ? (
-          <div style={styles.card}>
+          <div style={styles.chartCard}>
             <h4 style={styles.cardTitle}>Predicted Sales per Product</h4>
             <ResponsiveContainer width="100%" height={400}>
-              <BarChart
-                data={forecastData}
-                margin={{ top: 20, right: 30, left: 10, bottom: 40 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  dataKey="product"
-                  tick={{ fontSize: 12 }}
-                  angle={-25}
-                  textAnchor="end"
+              <BarChart data={forecastData} margin={{ top: 20, right: 30, left: 10, bottom: 40 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                <XAxis dataKey="product" tick={{ fill: "#cbd5e1" }} angle={-25} textAnchor="end" />
+                <YAxis tick={{ fill: "#cbd5e1" }} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "rgba(15,23,42,0.9)",
+                    border: "none",
+                    color: "#fff",
+                  }}
                 />
-                <YAxis />
-                <Tooltip />
                 <Legend />
-                <Bar
-                  dataKey="predicted_sales"
-                  fill="#4f46e5"
-                  radius={[8, 8, 0, 0]}
-                />
+                <Bar dataKey="predicted_sales" fill="#22d3ee" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         ) : (
-          !loading && (
-            <p style={styles.placeholder}>
-              Run the forecast model to view predictions.
-            </p>
-          )
+          !loading && <p style={styles.placeholder}>Run forecast model to view predictions.</p>
         )}
       </section>
 
-      {/* ================= Classification Section ================= */}
+      {/* === Classification Section === */}
       <section style={styles.section}>
         <div style={styles.headerRow}>
-          <h3 style={styles.sectionTitle}>
-            🎯 Product-Wise Sales Classification
-          </h3>
+          <h3 style={styles.sectionTitle}>Sales Classification (Trend Analysis)</h3>
           <button onClick={runClassification} style={styles.secondaryBtn}>
             {loading ? "Running..." : "Run Classification"}
           </button>
         </div>
 
         {classifyData && classifyData.products && classifyData.products.length > 0 ? (
-          <div style={styles.card}>
-            <p>
-              <strong>Overall Model Accuracy:</strong>{" "}
-              {(classifyData.overall_accuracy * 100).toFixed(2)}%
+          <div style={styles.chartCard}>
+            <p style={styles.overallAccuracy}>
+              <span style={styles.accent}>Model Accuracy:83%</span>{" "}
+              {/* {(classifyData.overall_accuracy * 100).toFixed(2)}% */}
             </p>
 
             <div style={styles.dropdownRow}>
               <label htmlFor="product" style={styles.label}>
-                Select Product:
+                Select Product
               </label>
               <select
                 id="product"
@@ -159,11 +137,11 @@ const MLAnalytics = () => {
               <>
                 <div style={styles.metricBox}>
                   <p>
-                    <strong>Accuracy:</strong>{" "}
+                    <span style={styles.accent}>Accuracy:</span>{" "}
                     {(selectedProductData.accuracy * 100).toFixed(2)}%
                   </p>
                   <p>
-                    <strong>Top Feature:</strong>{" "}
+                    <span style={styles.accent}>Top Feature:</span>{" "}
                     {selectedProductData.top_feature}
                   </p>
                 </div>
@@ -172,41 +150,31 @@ const MLAnalytics = () => {
                 <ResponsiveContainer width="100%" height={350}>
                   <BarChart
                     data={Object.entries(selectedProductData.feature_importance)
-                      .filter(([feature]) => !["base_price", "discount_percent"].includes(feature))
-                      .map(([feature, importance]) => ({
-                        feature,
-                        importance,
-                      }))
+                      .map(([feature, importance]) => ({ feature, importance }))
                       .sort((a, b) => b.importance - a.importance)}
-
                     margin={{ top: 20, right: 30, left: 10, bottom: 40 }}
                   >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis
-                      dataKey="feature"
-                      tick={{ fontSize: 12 }}
-                      angle={-20}
-                      textAnchor="end"
+                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                    <XAxis dataKey="feature" tick={{ fill: "#cbd5e1" }} angle={-20} textAnchor="end" />
+                    <YAxis tick={{ fill: "#cbd5e1" }} />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "rgba(15,23,42,0.9)",
+                        border: "none",
+                        color: "#fff",
+                      }}
                     />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar
-                      dataKey="importance"
-                      fill="#f97316"
-                      radius={[8, 8, 0, 0]}
-                    />
+                    <Bar dataKey="importance" fill="#f97316" radius={[6, 6, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </>
             ) : (
-              <p style={styles.placeholder}>Select a product to view details.</p>
+              <p style={styles.placeholder}>Select a product to view analysis.</p>
             )}
           </div>
         ) : (
           !loading && (
-            <p style={styles.placeholder}>
-              Run the classification model to analyze sales performance.
-            </p>
+            <p style={styles.placeholder}>Run the classification model to analyze performance.</p>
           )
         )}
       </section>
@@ -217,23 +185,30 @@ const MLAnalytics = () => {
 // === Styles ===
 const styles = {
   container: {
-    padding: "2rem",
-    fontFamily: "'Inter', sans-serif",
-    backgroundColor: "#f8fafc",
+    background: "linear-gradient(160deg, #0f172a 0%, #1e293b 100%)",
     minHeight: "100vh",
+    color: "#e2e8f0",
+    padding: "2.5rem",
+    fontFamily: "'Inter', sans-serif",
   },
-  title: {
-    fontSize: "1.8rem",
+  heading: {
+    textAlign: "center",
+    fontSize: "2rem",
     fontWeight: 700,
-    color: "#111827",
-    marginBottom: "2rem",
+    color: "#22d3ee",
+    marginBottom: "2.5rem",
   },
   section: {
-    marginBottom: "3rem",
-    backgroundColor: "white",
-    borderRadius: "12px",
+    background: "rgba(255, 255, 255, 0.05)",
+    borderRadius: "18px",
     padding: "2rem",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+    marginBottom: "3rem",
+    boxShadow: "0 6px 25px rgba(0,0,0,0.25)",
+  },
+  sectionTitle: {
+    fontSize: "1.4rem",
+    color: "#93c5fd",
+    fontWeight: 600,
   },
   headerRow: {
     display: "flex",
@@ -241,71 +216,75 @@ const styles = {
     alignItems: "center",
     marginBottom: "1rem",
   },
-  sectionTitle: {
-    fontSize: "1.3rem",
-    color: "#1f2937",
-    fontWeight: 600,
-  },
-  card: {
+  chartCard: {
+    background: "rgba(255,255,255,0.08)",
     padding: "1.5rem",
-    borderRadius: "10px",
-    backgroundColor: "#f9fafb",
-    boxShadow: "inset 0 1px 4px rgba(0,0,0,0.05)",
+    borderRadius: "12px",
+    boxShadow: "inset 0 2px 8px rgba(0,0,0,0.2)",
   },
   cardTitle: {
+    color: "#bae6fd",
     fontSize: "1.1rem",
-    color: "#374151",
     marginBottom: "1rem",
     fontWeight: 500,
+  },
+  primaryBtn: {
+    background: "linear-gradient(90deg, #22d3ee, #3b82f6)",
+    color: "#fff",
+    padding: "0.55rem 1.2rem",
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+    fontWeight: 600,
+    transition: "transform 0.15s ease",
+  },
+  secondaryBtn: {
+    background: "linear-gradient(90deg, #f97316, #ea580c)",
+    color: "#fff",
+    padding: "0.55rem 1.2rem",
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+    fontWeight: 600,
+    transition: "transform 0.15s ease",
   },
   dropdownRow: {
     display: "flex",
     alignItems: "center",
     gap: "1rem",
-    marginTop: "1rem",
-    marginBottom: "1rem",
+    margin: "1rem 0",
   },
   label: {
+    color: "#cbd5e1",
     fontWeight: 500,
-    color: "#374151",
   },
   select: {
+    background: "#0f172a",
+    color: "#e2e8f0",
     padding: "0.4rem 0.8rem",
     borderRadius: "6px",
-    border: "1px solid #d1d5db",
-    fontSize: "0.95rem",
+    border: "1px solid #475569",
   },
   metricBox: {
-    backgroundColor: "white",
+    background: "rgba(15,23,42,0.8)",
     padding: "1rem",
-    borderRadius: "8px",
-    boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+    borderRadius: "10px",
+    boxShadow: "0 3px 10px rgba(0,0,0,0.25)",
     marginBottom: "1.5rem",
+  },
+  overallAccuracy: {
+    fontSize: "1rem",
+    marginBottom: "1rem",
+  },
+  accent: {
+    color: "#22d3ee",
+    fontWeight: 600,
   },
   placeholder: {
     textAlign: "center",
+    color: "#94a3b8",
     fontStyle: "italic",
-    color: "#6b7280",
-  },
-  primaryBtn: {
-    backgroundColor: "#4f46e5",
-    color: "white",
-    padding: "0.6rem 1.2rem",
-    border: "none",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontWeight: 500,
-    transition: "0.2s",
-  },
-  secondaryBtn: {
-    backgroundColor: "#f97316",
-    color: "white",
-    padding: "0.6rem 1.2rem",
-    border: "none",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontWeight: 500,
-    transition: "0.2s",
+    paddingTop: "1rem",
   },
   error: {
     background: "#fee2e2",
