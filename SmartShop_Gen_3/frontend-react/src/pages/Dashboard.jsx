@@ -67,14 +67,14 @@ const Dashboard = () => {
         </div>
         <div style={styles.statsContainer}>
           <div style={styles.statCard}>
-            <div style={styles.statIcon}>📦</div>
+            <div style={styles.statIcon}></div>
             <div>
               <div style={styles.statValue}>{inventory.length}</div>
               <div style={styles.statLabel}>Products</div>
             </div>
           </div>
           <div style={styles.statCard}>
-            <div style={styles.statIcon}>📊</div>
+            <div style={styles.statIcon}></div>
             <div>
               <div style={styles.statValue}>{transactions.length}</div>
               <div style={styles.statLabel}>Transactions</div>
@@ -86,7 +86,7 @@ const Dashboard = () => {
       <div style={styles.filterBar}>
         <div style={styles.filterGroup}>
           <label style={styles.label}>
-            <span style={styles.labelIcon}>📅</span>
+            <span style={styles.labelIcon}></span>
             Date Filter
           </label>
           <input
@@ -100,7 +100,7 @@ const Dashboard = () => {
 
         <div style={styles.filterGroup}>
           <label style={styles.label}>
-            <span style={styles.labelIcon}>📋</span>
+            <span style={styles.labelIcon}></span>
             Rows Limit
           </label>
           <select
@@ -115,7 +115,7 @@ const Dashboard = () => {
         </div>
 
         <button onClick={fetchData} style={styles.refreshBtn}>
-          <span style={styles.btnIcon}>🔄</span>
+          <span style={styles.btnIcon}></span>
           Refresh Data
         </button>
       </div>
@@ -128,7 +128,7 @@ const Dashboard = () => {
       )}
       {error && (
         <div style={styles.errorContainer}>
-          <span style={styles.errorIcon}>⚠️</span>
+          <span style={styles.errorIcon}></span>
           <h3 style={styles.error}>{error}</h3>
         </div>
       )}
@@ -140,7 +140,7 @@ const Dashboard = () => {
               <div style={styles.sectionHeader}>
                 <div>
                   <h2 style={styles.subTitle}>
-                    <span style={styles.titleIcon}>📦</span>
+                    <span style={styles.titleIcon}></span>
                     Inventory Overview
                   </h2>
                   <p style={styles.sectionDescription}>Current stock levels for all products</p>

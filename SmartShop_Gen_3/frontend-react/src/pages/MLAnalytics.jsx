@@ -67,7 +67,7 @@ const MLAnalytics = () => {
       <div style={styles.headerSection}>
         <div>
           <h1 style={styles.heading}>
-            <span style={styles.headingIcon}>🤖</span>
+            <span style={styles.headingIcon}></span>
             ML Analytics
           </h1>
           <p style={styles.subheading}>Predictive insights and machine learning models</p>
@@ -76,7 +76,7 @@ const MLAnalytics = () => {
 
       {error && (
         <div style={styles.errorContainer}>
-          <span style={styles.errorIcon}>⚠️</span>
+          <span style={styles.errorIcon}></span>
           <p style={styles.error}>{error}</p>
         </div>
       )}
@@ -94,12 +94,12 @@ const MLAnalytics = () => {
           <button onClick={runForecast} style={styles.primaryBtn} disabled={loading}>
             {loading ? (
               <>
-                <span style={styles.btnSpinner}>⏳</span>
+                <span style={styles.btnSpinner}></span>
                 Running...
               </>
             ) : (
               <>
-                <span style={styles.btnIcon}>🚀</span>
+                <span style={styles.btnIcon}></span>
                 Run Forecast
               </>
             )}
@@ -110,7 +110,7 @@ const MLAnalytics = () => {
           <div style={styles.chartCard}>
             <div style={styles.cardHeader}>
               <h4 style={styles.cardTitle}>
-                <span style={styles.cardIcon}>📊</span>
+                <span style={styles.cardIcon}></span>
                 Predicted Sales per Product
               </h4>
               <div style={styles.badge}>
@@ -160,7 +160,7 @@ const MLAnalytics = () => {
         ) : (
           !loading && (
             <div style={styles.emptyState}>
-              <span style={styles.emptyIcon}>📊</span>
+              <span style={styles.emptyIcon}></span>
               <p style={styles.placeholder}>Run forecast model to view predictions.</p>
             </div>
           )
@@ -172,7 +172,7 @@ const MLAnalytics = () => {
         <div style={styles.sectionHeader}>
           <div>
             <h3 style={styles.sectionTitle}>
-              <span style={styles.sectionIcon}>🔍</span>
+              <span style={styles.sectionIcon}></span>
               Sales Classification (Trend Analysis)
             </h3>
             <p style={styles.sectionDescription}>Analyze product trends and feature importance</p>
@@ -180,12 +180,12 @@ const MLAnalytics = () => {
           <button onClick={runClassification} style={styles.secondaryBtn} disabled={loading}>
             {loading ? (
               <>
-                <span style={styles.btnSpinner}>⏳</span>
+                <span style={styles.btnSpinner}></span>
                 Running...
               </>
             ) : (
               <>
-                <span style={styles.btnIcon}>🎯</span>
+                <span style={styles.btnIcon}></span>
                 Run Classification
               </>
             )}
@@ -196,7 +196,7 @@ const MLAnalytics = () => {
           <div style={styles.chartCard}>
             <div style={styles.dropdownRow}>
               <label htmlFor="product" style={styles.label}>
-                <span style={styles.labelIcon}>📦</span>
+                <span style={styles.labelIcon}></span>
                 Select Product
               </label>
               <select
@@ -217,7 +217,7 @@ const MLAnalytics = () => {
               <>
                 <div style={styles.metricsGrid}>
                   <div style={styles.metricCard}>
-                    <div style={styles.metricIcon}>⭐</div>
+                    <div style={styles.metricIcon}></div>
                     <div>
                       <div style={styles.metricLabel}>Top Feature</div>
                       <div style={styles.metricValue}>{selectedProductData.top_feature}</div>
@@ -227,7 +227,7 @@ const MLAnalytics = () => {
 
                 <div style={styles.chartSection}>
                   <h4 style={styles.cardTitle}>
-                    <span style={styles.cardIcon}>📊</span>
+                    <span style={styles.cardIcon}></span>
                     Feature Importance
                   </h4>
                   <div style={styles.chartWrapper}>
@@ -277,7 +277,7 @@ const MLAnalytics = () => {
               </>
             ) : (
               <div style={styles.emptyState}>
-                <span style={styles.emptyIcon}>📦</span>
+                <span style={styles.emptyIcon}></span>
                 <p style={styles.placeholder}>Select a product to view analysis.</p>
               </div>
             )}
@@ -285,7 +285,7 @@ const MLAnalytics = () => {
         ) : (
           !loading && (
             <div style={styles.emptyState}>
-              <span style={styles.emptyIcon}>🔍</span>
+              <span style={styles.emptyIcon}></span>
               <p style={styles.placeholder}>Run the classification model to analyze performance.</p>
             </div>
           )
