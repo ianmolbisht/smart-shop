@@ -14,6 +14,8 @@ import {
 const FORECAST_URL = "http://127.0.0.1:8000/predict/forecast";
 const CLASSIFY_URL = "http://127.0.0.1:8000/predict/classify";
 
+
+
 const MLAnalytics = () => {
   const [forecastData, setForecastData] = useState([]);
   const [classifyData, setClassifyData] = useState(null);
@@ -62,61 +64,139 @@ const MLAnalytics = () => {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.heading}>SmartShop — ML Analytics</h1>
-      {error && <p style={styles.error}>{error}</p>}
+      <div style={styles.headerSection}>
+        <div>
+          <h1 style={styles.heading}>
+            <span style={styles.headingIcon}>🤖</span>
+            ML Analytics
+          </h1>
+          <p style={styles.subheading}>Predictive insights and machine learning models</p>
+        </div>
+      </div>
+
+      {error && (
+        <div style={styles.errorContainer}>
+          <span style={styles.errorIcon}>⚠️</span>
+          <p style={styles.error}>{error}</p>
+        </div>
+      )}
 
       {/* === Forecast Section === */}
       <section style={styles.section}>
-        <div style={styles.headerRow}>
-          <h3 style={styles.sectionTitle}>Sales Forecast (Regression)</h3>
-          <button onClick={runForecast} style={styles.primaryBtn}>
-            {loading ? "Running..." : "Run Forecast"}
+        <div style={styles.sectionHeader}>
+          <div>
+            <h3 style={styles.sectionTitle}>
+              <span style={styles.sectionIcon}>📈</span>
+              Sales Forecast (Regression)
+            </h3>
+            <p style={styles.sectionDescription}>Predict future sales using regression analysis</p>
+          </div>
+          <button onClick={runForecast} style={styles.primaryBtn} disabled={loading}>
+            {loading ? (
+              <>
+                <span style={styles.btnSpinner}>⏳</span>
+                Running...
+              </>
+            ) : (
+              <>
+                <span style={styles.btnIcon}>🚀</span>
+                Run Forecast
+              </>
+            )}
           </button>
         </div>
 
         {forecastData.length > 0 ? (
           <div style={styles.chartCard}>
-            <h4 style={styles.cardTitle}>Predicted Sales per Product</h4>
-            <ResponsiveContainer width="100%" height={400}>
-              <BarChart data={forecastData} margin={{ top: 20, right: 30, left: 10, bottom: 40 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                <XAxis dataKey="product" tick={{ fill: "#cbd5e1" }} angle={-25} textAnchor="end" />
-                <YAxis tick={{ fill: "#cbd5e1" }} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "rgba(15,23,42,0.9)",
-                    border: "none",
-                    color: "#fff",
-                  }}
-                />
-                <Legend />
-                <Bar dataKey="predicted_sales" fill="#22d3ee" radius={[6, 6, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+            <div style={styles.cardHeader}>
+              <h4 style={styles.cardTitle}>
+                <span style={styles.cardIcon}>📊</span>
+                Predicted Sales per Product
+              </h4>
+              <div style={styles.badge}>
+                {forecastData.length} Products
+              </div>
+            </div>
+            <div style={styles.chartWrapper}>
+              <ResponsiveContainer width="100%" height={400}>
+                <BarChart data={forecastData} margin={{ top: 20, right: 30, left: 10, bottom: 60 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(148, 163, 184, 0.1)" />
+                  <XAxis 
+                    dataKey="product" 
+                    tick={{ fill: "#cbd5e1", fontSize: 12 }} 
+                    angle={-25} 
+                    textAnchor="end" 
+                  />
+                  <YAxis tick={{ fill: "#cbd5e1", fontSize: 12 }} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "rgba(15, 23, 42, 0.95)",
+                      border: "1px solid rgba(34, 211, 238, 0.3)",
+                      borderRadius: "8px",
+                      boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
+                      color: "#fff",
+                    }}
+                    labelStyle={{ color: "#22d3ee", fontWeight: 600 }}
+                    itemStyle={{ color: "#e2e8f0" }}
+                  />
+                  <Legend />
+                  <Bar 
+                    dataKey="predicted_sales" 
+                    fill="url(#forecastGradient)" 
+                    radius={[8, 8, 0, 0]}
+                    animationDuration={1000}
+                  >
+                    <defs>
+                      <linearGradient id="forecastGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#22d3ee" stopOpacity={1}/>
+                        <stop offset="100%" stopColor="#06b6d4" stopOpacity={0.8}/>
+                      </linearGradient>
+                    </defs>
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         ) : (
-          !loading && <p style={styles.placeholder}>Run forecast model to view predictions.</p>
+          !loading && (
+            <div style={styles.emptyState}>
+              <span style={styles.emptyIcon}>📊</span>
+              <p style={styles.placeholder}>Run forecast model to view predictions.</p>
+            </div>
+          )
         )}
       </section>
 
       {/* === Classification Section === */}
       <section style={styles.section}>
-        <div style={styles.headerRow}>
-          <h3 style={styles.sectionTitle}>Sales Classification (Trend Analysis)</h3>
-          <button onClick={runClassification} style={styles.secondaryBtn}>
-            {loading ? "Running..." : "Run Classification"}
+        <div style={styles.sectionHeader}>
+          <div>
+            <h3 style={styles.sectionTitle}>
+              <span style={styles.sectionIcon}>🔍</span>
+              Sales Classification (Trend Analysis)
+            </h3>
+            <p style={styles.sectionDescription}>Analyze product trends and feature importance</p>
+          </div>
+          <button onClick={runClassification} style={styles.secondaryBtn} disabled={loading}>
+            {loading ? (
+              <>
+                <span style={styles.btnSpinner}>⏳</span>
+                Running...
+              </>
+            ) : (
+              <>
+                <span style={styles.btnIcon}>🎯</span>
+                Run Classification
+              </>
+            )}
           </button>
         </div>
 
         {classifyData && classifyData.products && classifyData.products.length > 0 ? (
           <div style={styles.chartCard}>
-            <p style={styles.overallAccuracy}>
-              <span style={styles.accent}>Model Accuracy:83%</span>{" "}
-              {/* {(classifyData.overall_accuracy * 100).toFixed(2)}% */}
-            </p>
-
             <div style={styles.dropdownRow}>
               <label htmlFor="product" style={styles.label}>
+                <span style={styles.labelIcon}>📦</span>
                 Select Product
               </label>
               <select
@@ -135,46 +215,79 @@ const MLAnalytics = () => {
 
             {selectedProductData ? (
               <>
-                <div style={styles.metricBox}>
-                  <p>
-                    <span style={styles.accent}>Accuracy:</span>{" "}
-                    {(selectedProductData.accuracy * 100).toFixed(2)}%
-                  </p>
-                  <p>
-                    <span style={styles.accent}>Top Feature:</span>{" "}
-                    {selectedProductData.top_feature}
-                  </p>
+                <div style={styles.metricsGrid}>
+                  <div style={styles.metricCard}>
+                    <div style={styles.metricIcon}>⭐</div>
+                    <div>
+                      <div style={styles.metricLabel}>Top Feature</div>
+                      <div style={styles.metricValue}>{selectedProductData.top_feature}</div>
+                    </div>
+                  </div>
                 </div>
 
-                <h4 style={styles.cardTitle}>Feature Importance</h4>
-                <ResponsiveContainer width="100%" height={350}>
-                  <BarChart
-                    data={Object.entries(selectedProductData.feature_importance)
-                      .map(([feature, importance]) => ({ feature, importance }))
-                      .sort((a, b) => b.importance - a.importance)}
-                    margin={{ top: 20, right: 30, left: 10, bottom: 40 }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                    <XAxis dataKey="feature" tick={{ fill: "#cbd5e1" }} angle={-20} textAnchor="end" />
-                    <YAxis tick={{ fill: "#cbd5e1" }} />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "rgba(15,23,42,0.9)",
-                        border: "none",
-                        color: "#fff",
-                      }}
-                    />
-                    <Bar dataKey="importance" fill="#f97316" radius={[6, 6, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
+                <div style={styles.chartSection}>
+                  <h4 style={styles.cardTitle}>
+                    <span style={styles.cardIcon}>📊</span>
+                    Feature Importance
+                  </h4>
+                  <div style={styles.chartWrapper}>
+                    <ResponsiveContainer width="100%" height={350}>
+                      <BarChart
+                        data={Object.entries(selectedProductData.feature_importance)
+                          .map(([feature, importance]) => ({ feature, importance }))
+                          .sort((a, b) => b.importance - a.importance)}
+                        margin={{ top: 20, right: 30, left: 10, bottom: 60 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(148, 163, 184, 0.1)" />
+                        <XAxis 
+                          dataKey="feature" 
+                          tick={{ fill: "#cbd5e1", fontSize: 12 }} 
+                          angle={-20} 
+                          textAnchor="end" 
+                        />
+                        <YAxis tick={{ fill: "#cbd5e1", fontSize: 12 }} />
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: "rgba(15, 23, 42, 0.95)",
+                            border: "1px solid rgba(249, 115, 22, 0.3)",
+                            borderRadius: "8px",
+                            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
+                            color: "#fff",
+                          }}
+                          labelStyle={{ color: "#f97316", fontWeight: 600 }}
+                          itemStyle={{ color: "#2e6bbaff" }}
+                        />
+                        <Bar 
+                          dataKey="importance" 
+                          fill="url(#importanceGradient)" 
+                          radius={[8, 8, 0, 0]}
+                          animationDuration={1000}
+                        >
+                          <defs>
+                            <linearGradient id="importanceGradient" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stopColor="#f97316" stopOpacity={1}/>
+                              <stop offset="100%" stopColor="#ea580c" stopOpacity={0.8}/>
+                            </linearGradient>
+                          </defs>
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
               </>
             ) : (
-              <p style={styles.placeholder}>Select a product to view analysis.</p>
+              <div style={styles.emptyState}>
+                <span style={styles.emptyIcon}>📦</span>
+                <p style={styles.placeholder}>Select a product to view analysis.</p>
+              </div>
             )}
           </div>
         ) : (
           !loading && (
-            <p style={styles.placeholder}>Run the classification model to analyze performance.</p>
+            <div style={styles.emptyState}>
+              <span style={styles.emptyIcon}>🔍</span>
+              <p style={styles.placeholder}>Run the classification model to analyze performance.</p>
+            </div>
           )
         )}
       </section>
@@ -185,114 +298,255 @@ const MLAnalytics = () => {
 // === Styles ===
 const styles = {
   container: {
-    background: "linear-gradient(160deg, #0f172a 0%, #1e293b 100%)",
+    background: "linear-gradient(160deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)",
     minHeight: "100vh",
     color: "#e2e8f0",
-    padding: "2.5rem",
-    fontFamily: "'Inter', sans-serif",
+    padding: "2.5rem 3rem",
+    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    position: "relative",
+    overflowX: "hidden",
+  },
+  headerSection: {
+    marginBottom: "3rem",
   },
   heading: {
-    textAlign: "center",
-    fontSize: "2rem",
-    fontWeight: 700,
-    color: "#22d3ee",
-    marginBottom: "2.5rem",
+    display: "flex",
+    alignItems: "center",
+    gap: "1rem",
+    fontSize: "2.8rem",
+    fontWeight: 800,
+    background: "linear-gradient(135deg, #22d3ee 0%, #3b82f6 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    backgroundClip: "text",
+    marginBottom: "0.5rem",
+    letterSpacing: "-1px",
+  },
+  headingIcon: {
+    fontSize: "2.8rem",
+    filter: "drop-shadow(0 2px 8px rgba(34, 211, 238, 0.4))",
+  },
+  subheading: {
+    fontSize: "1.1rem",
+    color: "#94a3b8",
+    fontWeight: 400,
+    marginTop: "0.5rem",
+    marginLeft: "3.8rem",
   },
   section: {
-    background: "rgba(255, 255, 255, 0.05)",
-    borderRadius: "18px",
-    padding: "2rem",
-    marginBottom: "3rem",
-    boxShadow: "0 6px 25px rgba(0,0,0,0.25)",
+    background: "rgba(255, 255, 255, 0.04)",
+    borderRadius: "24px",
+    padding: "2rem 2.5rem",
+    marginBottom: "2.5rem",
+    boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
+    border: "1px solid rgba(148, 163, 184, 0.1)",
+    backdropFilter: "blur(10px)",
+    transition: "all 0.3s ease",
+  },
+  sectionHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: "2rem",
+    gap: "2rem",
   },
   sectionTitle: {
-    fontSize: "1.4rem",
-    color: "#93c5fd",
-    fontWeight: 600,
+    display: "flex",
+    alignItems: "center",
+    gap: "0.8rem",
+    fontSize: "1.6rem",
+    color: "#e2e8f0",
+    fontWeight: 700,
+    marginBottom: "0.5rem",
   },
-  headerRow: {
+  sectionIcon: {
+    fontSize: "1.8rem",
+  },
+  sectionDescription: {
+    color: "#94a3b8",
+    fontSize: "0.95rem",
+    marginTop: "0.5rem",
+    marginLeft: "2.6rem",
+  },
+  chartCard: {
+    background: "rgba(15, 23, 42, 0.4)",
+    padding: "2rem",
+    borderRadius: "20px",
+    boxShadow: "inset 0 2px 12px rgba(0, 0, 0, 0.3)",
+    border: "1px solid rgba(148, 163, 184, 0.1)",
+  },
+  cardHeader: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: "1rem",
-  },
-  chartCard: {
-    background: "rgba(255,255,255,0.08)",
-    padding: "1.5rem",
-    borderRadius: "12px",
-    boxShadow: "inset 0 2px 8px rgba(0,0,0,0.2)",
+    marginBottom: "1.5rem",
   },
   cardTitle: {
-    color: "#bae6fd",
-    fontSize: "1.1rem",
-    marginBottom: "1rem",
-    fontWeight: 500,
+    display: "flex",
+    alignItems: "center",
+    gap: "0.6rem",
+    color: "#e2e8f0",
+    fontSize: "1.2rem",
+    fontWeight: 600,
+  },
+  cardIcon: {
+    fontSize: "1.3rem",
+  },
+  badge: {
+    background: "rgba(0, 224, 255, 0.15)",
+    color: "#00E0FF",
+    padding: "0.4rem 1rem",
+    borderRadius: "12px",
+    fontSize: "0.85rem",
+    fontWeight: 600,
+  },
+  chartWrapper: {
+    padding: "1rem",
+    background: "rgba(15, 23, 42, 0.3)",
+    borderRadius: "16px",
+  },
+  chartSection: {
+    marginTop: "2rem",
   },
   primaryBtn: {
-    background: "linear-gradient(90deg, #22d3ee, #3b82f6)",
+    display: "flex",
+    alignItems: "center",
+    gap: "0.5rem",
+    background: "linear-gradient(135deg, #22d3ee, #3b82f6)",
     color: "#fff",
-    padding: "0.55rem 1.2rem",
+    padding: "0.7rem 1.5rem",
     border: "none",
-    borderRadius: "8px",
+    borderRadius: "12px",
     cursor: "pointer",
     fontWeight: 600,
-    transition: "transform 0.15s ease",
+    fontSize: "0.95rem",
+    transition: "all 0.3s ease",
+    boxShadow: "0 4px 15px rgba(34, 211, 238, 0.4)",
+    whiteSpace: "nowrap",
   },
   secondaryBtn: {
-    background: "linear-gradient(90deg, #f97316, #ea580c)",
+    display: "flex",
+    alignItems: "center",
+    gap: "0.5rem",
+    background: "linear-gradient(135deg, #f97316, #ea580c)",
     color: "#fff",
-    padding: "0.55rem 1.2rem",
+    padding: "0.7rem 1.5rem",
     border: "none",
-    borderRadius: "8px",
+    borderRadius: "12px",
     cursor: "pointer",
     fontWeight: 600,
-    transition: "transform 0.15s ease",
+    fontSize: "0.95rem",
+    transition: "all 0.3s ease",
+    boxShadow: "0 4px 15px rgba(249, 115, 22, 0.4)",
+    whiteSpace: "nowrap",
+  },
+  btnIcon: {
+    fontSize: "1.1rem",
+  },
+  btnSpinner: {
+    fontSize: "1.1rem",
+    animation: "spin 1s linear infinite",
   },
   dropdownRow: {
     display: "flex",
     alignItems: "center",
     gap: "1rem",
-    margin: "1rem 0",
+    margin: "1.5rem 0",
+    padding: "1rem",
+    background: "rgba(15, 23, 42, 0.4)",
+    borderRadius: "12px",
   },
   label: {
+    display: "flex",
+    alignItems: "center",
+    gap: "0.5rem",
     color: "#cbd5e1",
-    fontWeight: 500,
+    fontWeight: 600,
+    fontSize: "0.95rem",
+  },
+  labelIcon: {
+    fontSize: "1.1rem",
   },
   select: {
-    background: "#0f172a",
+    background: "rgba(15, 23, 42, 0.6)",
     color: "#e2e8f0",
-    padding: "0.4rem 0.8rem",
-    borderRadius: "6px",
-    border: "1px solid #475569",
-  },
-  metricBox: {
-    background: "rgba(15,23,42,0.8)",
-    padding: "1rem",
+    padding: "0.6rem 1rem",
     borderRadius: "10px",
-    boxShadow: "0 3px 10px rgba(0,0,0,0.25)",
-    marginBottom: "1.5rem",
+    border: "1px solid rgba(148, 163, 184, 0.2)",
+    fontSize: "0.95rem",
+    fontWeight: 500,
+    cursor: "pointer",
+    transition: "all 0.3s ease",
+    outline: "none",
+    flex: 1,
+    maxWidth: "300px",
   },
-  overallAccuracy: {
-    fontSize: "1rem",
-    marginBottom: "1rem",
+  metricsGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+    gap: "1rem",
+    marginBottom: "2rem",
   },
-  accent: {
+  metricCard: {
+    display: "flex",
+    alignItems: "center",
+    gap: "1rem",
+    background: "rgba(15, 23, 42, 0.6)",
+    padding: "1.2rem",
+    borderRadius: "12px",
+    border: "1px solid rgba(148, 163, 184, 0.1)",
+  },
+  metricIcon: {
+    fontSize: "1.8rem",
     color: "#22d3ee",
-    fontWeight: 600,
+  },
+  metricLabel: {
+    fontSize: "0.85rem",
+    color: "#94a3b8",
+    fontWeight: 500,
+    marginBottom: "0.3rem",
+  },
+  metricValue: {
+    fontSize: "1.3rem",
+    fontWeight: 700,
+    color: "#e2e8f0",
+  },
+  emptyState: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "4rem 2rem",
+    gap: "1rem",
+  },
+  emptyIcon: {
+    fontSize: "4rem",
+    opacity: 0.5,
   },
   placeholder: {
     textAlign: "center",
     color: "#94a3b8",
     fontStyle: "italic",
-    paddingTop: "1rem",
+    fontSize: "1.1rem",
+  },
+  errorContainer: {
+    display: "flex",
+    alignItems: "center",
+    gap: "1rem",
+    padding: "1.2rem 1.5rem",
+    background: "rgba(239, 68, 68, 0.1)",
+    border: "1px solid rgba(239, 68, 68, 0.3)",
+    borderRadius: "12px",
+    marginBottom: "2rem",
+  },
+  errorIcon: {
+    fontSize: "1.5rem",
   },
   error: {
-    background: "#fee2e2",
-    color: "#b91c1c",
-    padding: "0.8rem 1rem",
-    borderRadius: "8px",
-    marginBottom: "1rem",
-    fontWeight: 500,
+    color: "#f87171",
+    fontSize: "1rem",
+    fontWeight: 600,
+    margin: 0,
   },
 };
 

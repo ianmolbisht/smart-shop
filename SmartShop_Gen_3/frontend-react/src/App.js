@@ -8,7 +8,7 @@ const App = () => {
 
   return (
     <div className="app">
-      <Navbar setPage={setPage} />
+      <Navbar setPage={setPage} currentPage={page} />
       {page === "dashboard" ? <Dashboard /> : <MLAnalytics />}
     </div>
   );
